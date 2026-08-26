@@ -20,6 +20,9 @@ namespace DeepScan
         [SerializeField]
         private FishMovement movement;
 
+        [SerializeField]
+        private FishInfoWorldUI infoUI;
+
 
         [Header("Scan Complete")]
 
@@ -49,27 +52,30 @@ namespace DeepScan
             scanPointRoot;
 
 
-        public void Initialize(
-            FishData fishData)
-        {
-            data = fishData;
+       public void Initialize(FishData fishData)
+{
+    data = fishData;
 
-            scanProgress = 0f;
+    scanProgress = 0f;
+    scanCompleted = false;
 
-            scanCompleted = false;
+    spriteRenderer.sprite =
+        data.Sprite;
 
-            spriteRenderer.sprite =
-                data.Sprite;
+    spriteRenderer.enabled =
+        false;
 
-            spriteRenderer.enabled =
-                false;
+    if (infoUI != null)
+    {
+        infoUI.Hide();
+    }
 
-            movement.Configure(
-                data.Movement
-            );
+    movement.Configure(
+        data.Movement
+    );
 
-            CreateScanShape();
-        }
+    CreateScanShape();
+}
 
 
         private void CreateScanShape()

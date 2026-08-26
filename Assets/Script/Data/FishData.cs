@@ -16,7 +16,7 @@ namespace DeepScan
         [SerializeField]
         private Sprite sprite;
 
-        [TextArea]
+        [TextArea(3, 6)]
         [SerializeField]
         private string description;
 
@@ -43,22 +43,14 @@ namespace DeepScan
 
 
         public string FishName => fishName;
-
         public Sprite Sprite => sprite;
+        public string Description => description;
 
-        public string Description =>
-            description;
+        public float ScanDuration => scanDuration;
+        public GameObject ScanShapePrefab => scanShapePrefab;
 
-        public float ScanDuration =>
-            scanDuration;
+        public FishMovementData Movement => movement;
 
-        public GameObject ScanShapePrefab =>
-            scanShapePrefab;
-
-        public FishMovementData Movement =>
-            movement;
-
-        public int DiscoveryScore =>
-            discoveryScore;
+        public int DiscoveryScore => discoveryScore;
     }
 }
