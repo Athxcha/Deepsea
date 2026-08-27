@@ -7,10 +7,17 @@ namespace DeepScan
         private FishMovementData data;
 
         private Vector3 startPosition;
-        private float movementTime;
         private float offset;
 
         private bool isPaused;
+
+        private Rigidbody rb;
+
+
+        private void Awake()
+        {
+            rb = GetComponent<Rigidbody>();
+        }
 
 
         public void Configure(FishMovementData movementData)
@@ -19,14 +26,7 @@ namespace DeepScan
 
             startPosition = transform.position;
 
-            movementTime = 0f;
-
-            offset = Random.Range(
-                0f,
-                100f
-            );
-
-            isPaused = false;
+            offset = Random.Range(0f, 100f);
         }
 
 
@@ -36,22 +36,17 @@ namespace DeepScan
         }
 
 
-        private void Update()
+        private void FixedUpdate()
         {
             if (data == null)
                 return;
 
-            // ถ้าปลาถูก Pause
-            // เวลาการว่ายก็หยุดด้วย
             if (isPaused)
                 return;
 
 
-            movementTime += Time.deltaTime;
-
-
             float t =
-                movementTime *
+                Time.time *
                 data.Speed +
                 offset;
 
@@ -65,13 +60,16 @@ namespace DeepScan
                 data.VerticalRange;
 
 
-            transform.position =
+            Vector3 targetPosition =
                 startPosition +
                 new Vector3(
                     x,
                     y,
                     0f
                 );
+
+
+            rb.MovePosition(targetPosition);
         }
     }
 }

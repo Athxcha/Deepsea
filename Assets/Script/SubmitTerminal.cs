@@ -2,11 +2,21 @@ using UnityEngine;
 
 namespace DeepScan
 {
-    public class SubmitTerminal :
-        MonoBehaviour
+    public class SubmitTerminal : MonoBehaviour
     {
+        [Header("Quiz")]
+
         [SerializeField]
         private QuizController quizController;
+
+        [SerializeField]
+        private QuizUI quizUI;
+
+
+        [Header("UI")]
+
+        [SerializeField]
+        private SubmitUI submitUI;
 
 
         private bool playerInside;
@@ -18,8 +28,7 @@ namespace DeepScan
                 return;
 
 
-            if (Input.GetKeyDown(
-                KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.E))
             {
                 Submit();
             }
@@ -32,8 +41,18 @@ namespace DeepScan
                 GameSession.Instance;
 
 
-            if (session.ScannedFish.Count ==
-                0)
+            if (session == null)
+            {
+                Debug.LogError(
+                    "GameSession does not exist."
+                );
+
+                return;
+            }
+
+
+            // ยังไม่ได้สแกนปลาเลย
+            if (session.ScannedFish.Count == 0)
             {
                 Debug.Log(
                     "No data to submit."
@@ -43,35 +62,59 @@ namespace DeepScan
             }
 
 
+            // กันกด Submit ซ้ำ
+            if (session.DataSubmitted)
+            {
+                Debug.Log(
+                    "Data already submitted."
+                );
+
+                return;
+            }
+
+
+            // ส่งข้อมูลปลาและรับคะแนน
             int gained =
                 session.SubmitData();
 
 
-            Debug.Log(
-                "DATA SUBMITTED +" +
-                gained
-            );
+            // ขึ้น +200 POINT มุมขวาบน
+            if (submitUI != null)
+            {
+                submitUI.ShowPoint(gained);
+            }
 
 
-            quizController
-                .BuildQuestions();
+            // สร้างคำถามจากปลาที่ผู้เล่นสแกน
+            quizController.BuildQuestions();
 
 
-            Debug.Log(
-                "Quiz Count: " +
-                quizController
-                    .Questions.Count
-            );
+            // ถ้ามีคำถาม ให้เปิด Quiz
+            if (quizController.Questions.Count > 0)
+            {
+                quizUI.OpenQuiz(
+                    quizController
+                );
+            }
+            else
+            {
+                Debug.Log(
+                    "No quiz available."
+                );
+            }
         }
 
 
         private void OnTriggerEnter(
             Collider other)
         {
-            if (other.CompareTag(
-                "Player"))
+            if (other.CompareTag("Player"))
             {
                 playerInside = true;
+
+                Debug.Log(
+                    "Press E to submit data."
+                );
             }
         }
 
@@ -79,8 +122,7 @@ namespace DeepScan
         private void OnTriggerExit(
             Collider other)
         {
-            if (other.CompareTag(
-                "Player"))
+            if (other.CompareTag("Player"))
             {
                 playerInside = false;
             }

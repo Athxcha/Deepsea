@@ -20,6 +20,11 @@ namespace DeepScan
         [SerializeField]
         private string question;
 
+        // รูปที่จะแสดงใน Quiz
+        // ลากใส่เองจาก Inspector
+        [SerializeField]
+        private Sprite questionImage;
+
         [SerializeField]
         private string[] answers;
 
@@ -38,6 +43,9 @@ namespace DeepScan
 
         public string Question =>
             question;
+
+        public Sprite QuestionImage =>
+            questionImage;
 
         public string[] Answers =>
             answers;

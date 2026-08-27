@@ -14,10 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DeepScan.QuizData
   id: Quiz_Shrimp_01
   relatedFish: {fileID: 11400000, guid: d443c98a3abe8724b9aaeeed26bfb21f, type: 2}
-  question: "\u0E01\u0E38\u0E49\u0E07\u0E2D\u0E32\u0E28\u0E31\u0E22\u0E2D\u0E22\u0E39\u0E48\u0E41\u0E2B\u0E25\u0E48\u0E07\u0E19\u0E49\u0E33\u0E44\u0E2B\u0E19"
+  question: Where do shrimp live?
+  questionImage: {fileID: 1506174478, guid: 9b3976dd79b8aa7448fae30c3cd36637, type: 3}
   answers:
-  - "\u0E19\u0E49\u0E33\u0E40\u0E04\u0E47\u0E21"
-  - "\u0E19\u0E49\u0E33\u0E08\u0E37\u0E14"
-  - "\u0E17\u0E31\u0E49\u0E07\u0E04\u0E38\u0E4B"
-  correctAnswerIndex: 0
+  - Saltwater
+  - Freshwater
+  - Brackish water
+  - All of the above
+  correctAnswerIndex: 3
   bonusScore: 20
