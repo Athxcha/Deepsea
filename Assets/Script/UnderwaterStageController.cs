@@ -2,52 +2,40 @@ using UnityEngine;
 
 namespace DeepScan
 {
-    public class UnderwaterStageController :
-        MonoBehaviour
+    public class UnderwaterStageController : MonoBehaviour
     {
-        [SerializeField]
-        private FishSpawner fishSpawner;
+        [Header("References")]
+        [SerializeField] private FishSpawner fishSpawner;
+        [SerializeField] private DiveTimer diveTimer;
 
-        [SerializeField]
-        private DiveTimer diveTimer;
+        [Header("Game")]
+        [SerializeField] private float diveDuration = 180f;
 
 
         private void Start()
         {
-            if (GameSession.Instance ==
-                null)
+            if (GameSession.Instance == null)
             {
-                Debug.LogError(
-                    "GameSession does not exist."
-                );
+                Debug.LogError("GameSession does not exist.");
+                return;
+            }
 
+            if (fishSpawner == null)
+            {
+                Debug.LogError("FishSpawner is missing.");
+                return;
+            }
+
+            if (diveTimer == null)
+            {
+                Debug.LogError("DiveTimer is missing.");
                 return;
             }
 
 
-            StageData stage =
-                GameSession.Instance
-                    .CurrentStage;
+            fishSpawner.SpawnFish();
 
-
-            if (stage == null)
-            {
-                Debug.LogError(
-                    "No current StageData."
-                );
-
-                return;
-            }
-
-
-            fishSpawner
-                .SpawnStageFish(stage);
-
-
-            diveTimer
-                .StartTimer(
-                    stage.DiveDuration
-                );
+            diveTimer.StartTimer(diveDuration);
         }
     }
 }

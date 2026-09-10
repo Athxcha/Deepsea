@@ -16,7 +16,9 @@ MonoBehaviour:
   fishName: Shrimp
   sprite: {fileID: -852808849, guid: 6182f5e7ec343ae4593330498ed6ea94, type: 3}
   description: Sea Creature
+  infoImage: {fileID: -677093684, guid: 3ae4119fd85c38042afc47bbb9a3a018, type: 3}
   scanDuration: 3
   scanShapePrefab: {fileID: 6179758569204543301, guid: b7bf7eb666e853f4f87c3ae1b2e80cf0, type: 3}
   movement: {fileID: 11400000, guid: 991012b19dffa7045a73ace88455089a, type: 2}
   discoveryScore: 100
+  resultPrefab: {fileID: 7596457428732076903, guid: bba9e1f803193594aa232d389a6472b2, type: 3}

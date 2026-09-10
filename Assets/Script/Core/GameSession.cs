@@ -12,6 +12,11 @@ namespace DeepScan
         }
 
 
+        // =====================================================
+        // STAGE COMPATIBILITY
+        // เก็บไว้ให้โค้ดเก่าที่ยังเรียก CurrentStage
+        // =====================================================
+
         public StageData CurrentStage
         {
             get;
@@ -19,27 +24,96 @@ namespace DeepScan
         }
 
 
-        private readonly List<FishData>
-            scannedFish = new();
+        // =====================================================
+        // FISH
+        // =====================================================
+
+        private readonly List<FishData> caughtFish =
+            new List<FishData>();
 
 
-        public IReadOnlyList<FishData>
-            ScannedFish => scannedFish;
+        // ระบบใหม่
+        public IReadOnlyList<FishData> CaughtFish =>
+            caughtFish;
 
 
+        // ระบบเก่า
+        // SubmitTerminal ยังเรียก ScannedFish
+        public IReadOnlyList<FishData> ScannedFish =>
+            caughtFish;
+
+
+        // =====================================================
+        // SCORE
+        // =====================================================
+
+        public int BaseScore
+        {
+            get;
+            private set;
+        }
+
+
+        public int CorrectAnswers
+        {
+            get;
+            private set;
+        }
+
+
+        public int Multiplier
+        {
+            get;
+            private set;
+        } = 1;
+
+
+        public int FinalScore
+        {
+            get;
+            private set;
+        }
+
+
+        // ระบบเก่ายังเรียก Score
         public int Score
         {
-            get;
-            private set;
+            get
+            {
+                if (FinalScore > 0)
+                    return FinalScore;
+
+                return BaseScore;
+            }
         }
 
 
-        public bool DataSubmitted
+        // =====================================================
+        // STATE
+        // =====================================================
+
+        public bool FishSubmitted
         {
             get;
             private set;
         }
 
+
+        // ระบบเก่ายังเรียก DataSubmitted
+        public bool DataSubmitted =>
+            FishSubmitted;
+
+
+        public bool LeaderboardSubmitted
+        {
+            get;
+            private set;
+        }
+
+
+        // =====================================================
+        // UNITY
+        // =====================================================
 
         private void Awake()
         {
@@ -50,89 +124,241 @@ namespace DeepScan
                 return;
             }
 
+
             Instance = this;
 
             DontDestroyOnLoad(gameObject);
         }
 
 
+        // =====================================================
+        // NEW GAME
+        // =====================================================
+
+        public void StartNewGame()
+        {
+            caughtFish.Clear();
+
+            BaseScore = 0;
+
+            CorrectAnswers = 0;
+
+            Multiplier = 1;
+
+            FinalScore = 0;
+
+            FishSubmitted = false;
+
+            LeaderboardSubmitted = false;
+        }
+
+
+        // =====================================================
+        // OLD STAGE SYSTEM COMPATIBILITY
+        //
+        // SceneFlowService / StageTerminal เก่ายังใช้ตัวนี้
+        // =====================================================
+
         public void StartStage(StageData stage)
         {
             CurrentStage = stage;
 
-            scannedFish.Clear();
+            StartNewGame();
 
-            Score = 0;
-
-            DataSubmitted = false;
+            Debug.Log(
+                "Game started with stage compatibility mode."
+            );
         }
 
 
-        public bool RegisterFish(
-            FishData fish)
+        // =====================================================
+        // REGISTER FISH
+        // =====================================================
+
+        public bool RegisterFish(FishData fish)
         {
             if (fish == null)
                 return false;
 
-            if (CurrentStage == null)
-                return false;
 
-            if (!CurrentStage.ContainsFish(fish))
-            {
-                Debug.LogWarning(
-                    "Fish does not belong to current stage."
-                );
+            // สำคัญ:
+            // ไม่เช็ค Contains
+            // เพราะต้องจับปลา Species เดิมหลายตัวได้
+            caughtFish.Add(fish);
 
-                return false;
-            }
-
-            if (scannedFish.Contains(fish))
-                return false;
-
-            scannedFish.Add(fish);
 
             Debug.Log(
-                "Fish scanned: " +
+                "Fish caught: " +
                 fish.FishName
             );
+
 
             return true;
         }
 
 
-        public bool HasScanned(
-            FishData fish)
+        // =====================================================
+        // HAS CAUGHT
+        // =====================================================
+
+        public bool HasCaught(FishData fish)
         {
-            return scannedFish.Contains(fish);
+            if (fish == null)
+                return false;
+
+
+            return caughtFish.Contains(fish);
         }
 
 
-        public int SubmitData()
+        // ระบบ Quiz เก่าอาจเรียก HasScanned
+        public bool HasScanned(FishData fish)
         {
-            if (DataSubmitted)
-                return 0;
+            return HasCaught(fish);
+        }
 
-            int gainedScore = 0;
 
-            foreach (FishData fish
-                     in scannedFish)
+        // =====================================================
+        // SUBMIT FISH
+        // ระบบใหม่
+        // =====================================================
+
+        public int SubmitFish()
+        {
+            if (FishSubmitted)
+                return BaseScore;
+
+
+            BaseScore = 0;
+
+
+            foreach (FishData fish in caughtFish)
             {
-                gainedScore +=
+                if (fish == null)
+                    continue;
+
+
+                BaseScore +=
                     fish.DiscoveryScore;
             }
 
-            Score += gainedScore;
 
-            DataSubmitted = true;
+            FishSubmitted = true;
 
-            return gainedScore;
+
+            Debug.Log(
+                "Fish Score = " +
+                BaseScore
+            );
+
+
+            return BaseScore;
         }
 
 
-        public void AddQuizScore(
-            int amount)
+        // =====================================================
+        // OLD SUBMIT SYSTEM COMPATIBILITY
+        //
+        // SubmitTerminal เก่ายังเรียก SubmitData()
+        // =====================================================
+
+        public int SubmitData()
         {
-            Score += amount;
+            return SubmitFish();
+        }
+
+
+        // =====================================================
+        // QUIZ
+        // =====================================================
+
+        public void RegisterCorrectAnswer()
+        {
+            CorrectAnswers++;
+
+
+            Debug.Log(
+                "Correct Answers = " +
+                CorrectAnswers
+            );
+        }
+
+
+        // =====================================================
+        // OLD QUIZ COMPATIBILITY
+        //
+        // ถ้ามี QuizController เก่าที่ยังเรียก AddQuizScore
+        // จะไม่ compile error
+        // =====================================================
+
+        public void AddQuizScore(int amount)
+        {
+            // ระบบใหม่ไม่ได้ใช้ BonusScore แล้ว
+            // เก็บ method ไว้เพื่อให้ code เก่า compile ผ่าน
+            Debug.Log(
+                "AddQuizScore compatibility call: " +
+                amount
+            );
+        }
+
+
+        // =====================================================
+        // FINAL SCORE
+        //
+        // 0 correct = x1
+        // 1 correct = x2
+        // 2 correct = x4
+        // 3 correct = x8
+        // =====================================================
+
+        public int CalculateFinalScore()
+        {
+            switch (CorrectAnswers)
+            {
+                case 1:
+                    Multiplier = 2;
+                    break;
+
+                case 2:
+                    Multiplier = 4;
+                    break;
+
+                case 3:
+                    Multiplier = 8;
+                    break;
+
+                default:
+                    Multiplier = 1;
+                    break;
+            }
+
+
+            FinalScore =
+                BaseScore *
+                Multiplier;
+
+
+            Debug.Log(
+                "Final Score = " +
+                BaseScore +
+                " x " +
+                Multiplier +
+                " = " +
+                FinalScore
+            );
+
+
+            return FinalScore;
+        }
+
+
+        // =====================================================
+        // LEADERBOARD
+        // =====================================================
+
+        public void MarkLeaderboardSubmitted()
+        {
+            LeaderboardSubmitted = true;
         }
     }
 }

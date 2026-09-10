@@ -6,6 +6,16 @@ namespace DeepScan
     public class QuizController :
         MonoBehaviour
     {
+        [Header("Quiz Pool")]
+
+        [SerializeField]
+        private QuizData[] quizPool;
+
+
+        [SerializeField]
+        private int maximumQuestions = 3;
+
+
         private readonly List<QuizData>
             questions = new();
 
@@ -19,41 +29,39 @@ namespace DeepScan
             questions.Clear();
 
 
-            GameSession session =
-                GameSession.Instance;
-
-
-            StageData stage =
-                session.CurrentStage;
-
-
-            if (stage == null)
+            if (GameSession.Instance == null)
                 return;
 
 
-            foreach (QuizData quiz
-                     in stage.Quizzes)
+            foreach (
+                QuizData quiz
+                in quizPool)
             {
                 if (quiz == null)
                     continue;
 
 
-                if (!session.HasScanned(
+                // เอาเฉพาะคำถามของ
+                // ชนิดปลาที่จับได้
+                if (!GameSession.Instance.HasCaught(
                     quiz.RelatedFish))
                 {
                     continue;
                 }
 
 
-                questions.Add(quiz);
+                questions.Add(
+                    quiz
+                );
             }
 
 
             Shuffle();
 
 
-            while (questions.Count >
-                   stage.MaximumQuestions)
+            while (
+                questions.Count >
+                maximumQuestions)
             {
                 questions.RemoveAt(
                     questions.Count - 1
@@ -64,10 +72,10 @@ namespace DeepScan
 
         private void Shuffle()
         {
-            for (int i =
-                     questions.Count - 1;
-                 i > 0;
-                 i--)
+            for (
+                int i = questions.Count - 1;
+                i > 0;
+                i--)
             {
                 int random =
                     Random.Range(
@@ -79,8 +87,10 @@ namespace DeepScan
                 QuizData temp =
                     questions[i];
 
+
                 questions[i] =
                     questions[random];
+
 
                 questions[random] =
                     temp;
@@ -92,6 +102,10 @@ namespace DeepScan
             QuizData quiz,
             int answerIndex)
         {
+            if (quiz == null)
+                return false;
+
+
             bool correct =
                 quiz.IsCorrect(
                     answerIndex
@@ -101,9 +115,7 @@ namespace DeepScan
             if (correct)
             {
                 GameSession.Instance
-                    .AddQuizScore(
-                        quiz.BonusScore
-                    );
+                    .RegisterCorrectAnswer();
             }
 
 

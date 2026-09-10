@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1961610e5c147ca40aaa944860d020c2, type: 3}
+  m_Name: Fish_Crab
+  m_EditorClassIdentifier: Assembly-CSharp::DeepScan.FishData
+  id: Fish_Crab
+  fishName: Crab
+  sprite: {fileID: -1848068945, guid: d519da3ccc45d9a4cab8d568d1a5bbcb, type: 3}
+  description: Sea Creature
+  infoImage: {fileID: -677093684, guid: 3ae4119fd85c38042afc47bbb9a3a018, type: 3}
+  scanDuration: 5
+  scanShapePrefab: {fileID: 6179758569204543301, guid: b7bf7eb666e853f4f87c3ae1b2e80cf0, type: 3}
+  movement: {fileID: 11400000, guid: 991012b19dffa7045a73ace88455089a, type: 2}
+  discoveryScore: 150
+  resultPrefab: {fileID: 7085888237896544700, guid: 876cdb2b7868a22459e8f8a46156c568, type: 3}

@@ -18,8 +18,9 @@ MonoBehaviour:
   diveDuration: 60
   fish:
   - fish: {fileID: 11400000, guid: d443c98a3abe8724b9aaeeed26bfb21f, type: 2}
-    amount: 2
+    amount: 4
   quizzes:
   - {fileID: 11400000, guid: 40d50e6f234b67f4f9789a2f5a99f619, type: 2}
   maximumQuestions: 3
-  rewards: []
+  rewards:
+  - {fileID: 0}

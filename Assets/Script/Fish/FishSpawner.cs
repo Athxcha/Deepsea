@@ -6,18 +6,44 @@ namespace DeepScan
     public class FishSpawner :
         MonoBehaviour
     {
+        [System.Serializable]
+        public class FishSpawnSetting
+        {
+            public FishData fish;
+
+            [Min(1)]
+            public int amount = 1;
+        }
+
+
+        [Header("Prefab")]
+
         [SerializeField]
         private FishActor fishPrefab;
+
+
+        [Header("Spawn Points")]
 
         [SerializeField]
         private Transform[] spawnPoints;
 
 
-        public void SpawnStageFish(
-            StageData stage)
+        [Header("Fish In Map")]
+
+        [SerializeField]
+        private FishSpawnSetting[] fish;
+
+
+        public void SpawnFish()
         {
-            if (stage == null)
+            if (fishPrefab == null)
+            {
+                Debug.LogError(
+                    "Fish Prefab is missing."
+                );
+
                 return;
+            }
 
 
             List<Transform> available =
@@ -26,9 +52,15 @@ namespace DeepScan
                 );
 
 
-            foreach (FishSpawnEntry entry
-                     in stage.Fish)
+            foreach (
+                FishSpawnSetting entry
+                in fish)
             {
+                if (entry == null ||
+                    entry.fish == null)
+                    continue;
+
+
                 for (int i = 0;
                      i < entry.amount;
                      i++)
@@ -53,12 +85,13 @@ namespace DeepScan
                     Transform spawn =
                         available[index];
 
+
                     available.RemoveAt(
                         index
                     );
 
 
-                    FishActor fish =
+                    FishActor fishActor =
                         Instantiate(
                             fishPrefab,
                             spawn.position,
@@ -66,7 +99,7 @@ namespace DeepScan
                         );
 
 
-                    fish.Initialize(
+                    fishActor.Initialize(
                         entry.fish
                     );
                 }

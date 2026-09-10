@@ -1,25 +1,32 @@
-using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace DeepScan
 {
-    public class QuizUI : MonoBehaviour
+    public class QuizUI :
+        MonoBehaviour
     {
-        [Header("Main UI")]
+        [Header("Logic")]
 
         [SerializeField]
-        private GameObject quizPanel;
+        private QuizController quizController;
+
+
+        [SerializeField]
+        private ResultFlowController resultFlow;
+
+
+        [Header("UI")]
+
+        [SerializeField]
+        private TMP_Text questionNumberText;
 
         [SerializeField]
         private TMP_Text questionText;
 
         [SerializeField]
-        private Image fishImage;
-
-
-        [Header("Answers")]
+        private Image questionImage;
 
         [SerializeField]
         private Button[] answerButtons;
@@ -28,61 +35,24 @@ namespace DeepScan
         private TMP_Text[] answerTexts;
 
 
-        [Header("Feedback")]
-
-        [SerializeField]
-        private TMP_Text feedbackText;
-
-        [SerializeField]
-        private SubmitUI submitUI;
+        private int currentIndex;
 
 
-        [Header("Settings")]
-
-        [SerializeField]
-        private float nextQuestionDelay = 1f;
-
-
-        private QuizController quizController;
-
-        private int currentQuestionIndex;
-
-        private bool answering;
-
-
-        private void Start()
+        public void BeginQuiz()
         {
-            quizPanel.SetActive(false);
-        }
+            quizController
+                .BuildQuestions();
 
 
-        public void OpenQuiz(
-            QuizController controller)
-        {
-            quizController =
-                controller;
+            currentIndex = 0;
 
 
-            if (quizController == null)
+            if (quizController
+                .Questions.Count == 0)
+            {
+                FinishQuiz();
                 return;
-
-
-            if (quizController.Questions.Count == 0)
-                return;
-
-
-            currentQuestionIndex = 0;
-
-            answering = false;
-
-
-            quizPanel.SetActive(true);
-
-
-            Cursor.visible = true;
-
-            Cursor.lockState =
-                CursorLockMode.None;
+            }
 
 
             ShowQuestion();
@@ -91,77 +61,64 @@ namespace DeepScan
 
         private void ShowQuestion()
         {
-            if (currentQuestionIndex >=
-                quizController.Questions.Count)
-            {
-                FinishQuiz();
-
-                return;
-            }
-
-
             QuizData quiz =
                 quizController
                     .Questions[
-                        currentQuestionIndex
+                        currentIndex
                     ];
+
+
+            questionNumberText.text =
+                "QUESTION " +
+                (currentIndex + 1) +
+                " / " +
+                quizController
+                    .Questions.Count;
 
 
             questionText.text =
                 quiz.Question;
 
 
-           // ใช้รูปที่กำหนดเองใน QuizData
-            
-            if (quiz.QuestionImage != null)
+            if (questionImage != null)
             {
-                fishImage.gameObject
-                    .SetActive(true);
-
-                fishImage.sprite =
+                questionImage.sprite =
                     quiz.QuestionImage;
-            }
-            else
-            {
-                fishImage.gameObject
-                    .SetActive(false);
-            }
 
-            if (feedbackText != null)
-            {
-                feedbackText.text = "";
+
+                questionImage.gameObject
+                    .SetActive(
+                        quiz.QuestionImage != null
+                    );
             }
 
 
-            string[] answers =
-                quiz.Answers;
-
-
-            for (int i = 0;
-                 i < answerButtons.Length;
-                 i++)
+            for (
+                int i = 0;
+                i < answerButtons.Length;
+                i++)
             {
-                if (i >= answers.Length)
-                {
-                    answerButtons[i]
-                        .gameObject
-                        .SetActive(false);
+                int index = i;
 
-                    continue;
-                }
+
+                bool hasAnswer =
+                    quiz.Answers != null &&
+                    i < quiz.Answers.Length;
 
 
                 answerButtons[i]
                     .gameObject
-                    .SetActive(true);
+                    .SetActive(
+                        hasAnswer
+                    );
 
 
-                answerButtons[i]
-                    .interactable = true;
+                if (!hasAnswer)
+                    continue;
 
 
                 answerTexts[i].text =
-                    answers[i];
+                    quiz.Answers[i];
 
 
                 answerButtons[i]
@@ -169,103 +126,46 @@ namespace DeepScan
                     .RemoveAllListeners();
 
 
-                int answerIndex = i;
-
-
                 answerButtons[i]
                     .onClick
                     .AddListener(
                         () =>
+                        {
                             SelectAnswer(
-                                answerIndex
-                            )
+                                index
+                            );
+                        }
                     );
             }
-
-
-            answering = true;
         }
 
 
         private void SelectAnswer(
             int answerIndex)
         {
-            if (!answering)
-                return;
-
-
-            answering = false;
-
-
-            DisableButtons();
-
-
             QuizData quiz =
                 quizController
                     .Questions[
-                        currentQuestionIndex
+                        currentIndex
                     ];
 
 
-            bool correct =
-                quizController.Answer(
-                    quiz,
-                    answerIndex
-                );
-
-
-            if (correct)
-            {
-                if (feedbackText != null)
-                {
-                    feedbackText.text =
-                        "CORRECT!";
-                }
-
-
-                if (submitUI != null)
-                {
-                    submitUI.ShowBonus(
-                        quiz.BonusScore
-                    );
-                }
-            }
-            else
-            {
-                if (feedbackText != null)
-                {
-                    feedbackText.text =
-                        "WRONG";
-                }
-            }
-
-
-            StartCoroutine(
-                NextQuestion()
+            quizController.Answer(
+                quiz,
+                answerIndex
             );
-        }
 
 
-        private void DisableButtons()
-        {
-            foreach (Button button
-                     in answerButtons)
+            currentIndex++;
+
+
+            if (currentIndex >=
+                quizController
+                    .Questions.Count)
             {
-                button.interactable =
-                    false;
+                FinishQuiz();
+                return;
             }
-        }
-
-
-        private IEnumerator NextQuestion()
-        {
-            yield return
-                new WaitForSeconds(
-                    nextQuestionDelay
-                );
-
-
-            currentQuestionIndex++;
 
 
             ShowQuestion();
@@ -274,19 +174,12 @@ namespace DeepScan
 
         private void FinishQuiz()
         {
-            quizPanel.SetActive(false);
+            GameSession.Instance
+                .CalculateFinalScore();
 
 
-            Cursor.visible = false;
-
-            Cursor.lockState =
-                CursorLockMode.Locked;
-
-
-            Debug.Log(
-                "Quiz Finished! Total Score: " +
-                GameSession.Instance.Score
-            );
+            resultFlow
+                .ShowScore();
         }
     }
 }

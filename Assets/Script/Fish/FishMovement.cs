@@ -7,26 +7,41 @@ namespace DeepScan
         private FishMovementData data;
 
         private Vector3 startPosition;
+
+        private float movementTime;
         private float offset;
 
         private bool isPaused;
 
-        private Rigidbody rb;
+
+        [Header("Swimming Bounds")]
+
+        [SerializeField]
+        private Vector3 minBounds =
+            new Vector3(-8f, 1f, -8f);
+
+        [SerializeField]
+        private Vector3 maxBounds =
+            new Vector3(8f, 8f, 8f);
 
 
-        private void Awake()
-        {
-            rb = GetComponent<Rigidbody>();
-        }
-
-
-        public void Configure(FishMovementData movementData)
+        public void Configure(
+            FishMovementData movementData)
         {
             data = movementData;
 
-            startPosition = transform.position;
+            startPosition =
+                transform.position;
 
-            offset = Random.Range(0f, 100f);
+            movementTime = 0f;
+
+            offset =
+                Random.Range(
+                    0f,
+                    100f
+                );
+
+            isPaused = false;
         }
 
 
@@ -36,7 +51,7 @@ namespace DeepScan
         }
 
 
-        private void FixedUpdate()
+        private void Update()
         {
             if (data == null)
                 return;
@@ -45,8 +60,12 @@ namespace DeepScan
                 return;
 
 
+            movementTime +=
+                Time.deltaTime;
+
+
             float t =
-                Time.time *
+                movementTime *
                 data.Speed +
                 offset;
 
@@ -55,9 +74,21 @@ namespace DeepScan
                 Mathf.Sin(t) *
                 data.HorizontalRange;
 
+
             float y =
                 Mathf.Sin(t * 0.7f) *
                 data.VerticalRange;
+
+
+            // เพิ่มการเคลื่อนที่แกน Z
+            // ให้ดูเหมือนว่ายในพื้นที่ 3D
+            float z =
+                Mathf.Sin(
+                    t * 0.45f +
+                    offset
+                ) *
+                data.HorizontalRange *
+                0.5f;
 
 
             Vector3 targetPosition =
@@ -65,11 +96,37 @@ namespace DeepScan
                 new Vector3(
                     x,
                     y,
-                    0f
+                    z
                 );
 
 
-            rb.MovePosition(targetPosition);
+            // บังคับไม่ให้ออกนอกพื้นที่
+            targetPosition.x =
+                Mathf.Clamp(
+                    targetPosition.x,
+                    minBounds.x,
+                    maxBounds.x
+                );
+
+
+            targetPosition.y =
+                Mathf.Clamp(
+                    targetPosition.y,
+                    minBounds.y,
+                    maxBounds.y
+                );
+
+
+            targetPosition.z =
+                Mathf.Clamp(
+                    targetPosition.z,
+                    minBounds.z,
+                    maxBounds.z
+                );
+
+
+            transform.position =
+                targetPosition;
         }
     }
 }

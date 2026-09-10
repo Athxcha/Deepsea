@@ -12,6 +12,9 @@ namespace DeepScan
         private SpriteRenderer spriteRenderer;
 
         [SerializeField]
+        private SpriteRenderer infoSpriteRenderer;
+
+        [SerializeField]
         private Transform scanShapeRoot;
 
         [SerializeField]
@@ -20,14 +23,11 @@ namespace DeepScan
         [SerializeField]
         private FishMovement movement;
 
-        [SerializeField]
-        private FishInfoWorldUI infoUI;
 
-
-        [Header("Scan Complete")]
+        [Header("Reveal")]
 
         [SerializeField]
-        private float revealDelay = 5f;
+        private float revealDuration = 5f;
 
 
         private FishData data;
@@ -52,30 +52,39 @@ namespace DeepScan
             scanPointRoot;
 
 
-       public void Initialize(FishData fishData)
-{
-    data = fishData;
+        public void Initialize(
+            FishData fishData)
+        {
+            data = fishData;
 
-    scanProgress = 0f;
-    scanCompleted = false;
+            scanProgress = 0f;
 
-    spriteRenderer.sprite =
-        data.Sprite;
+            scanCompleted = false;
 
-    spriteRenderer.enabled =
-        false;
 
-    if (infoUI != null)
-    {
-        infoUI.Hide();
-    }
+            // รูปปลา 2D
+            spriteRenderer.sprite =
+                data.Sprite;
 
-    movement.Configure(
-        data.Movement
-    );
+            spriteRenderer.enabled =
+                false;
 
-    CreateScanShape();
-}
+
+            // รูปข้อมูลปลา
+            infoSpriteRenderer.sprite =
+                data.InfoImage;
+
+            infoSpriteRenderer.enabled =
+                false;
+
+
+            movement.Configure(
+                data.Movement
+            );
+
+
+            CreateScanShape();
+        }
 
 
         private void CreateScanShape()
@@ -160,6 +169,10 @@ namespace DeepScan
         private IEnumerator
             CompleteScanSequence()
         {
+            // ==========================
+            // 1. Scan ครบ 100%
+            // ==========================
+
             Debug.Log(
                 "SCAN 100%: " +
                 data.FishName
@@ -170,41 +183,75 @@ namespace DeepScan
             movement.SetPaused(true);
 
 
-            // ยังให้จุดแดงค้างอยู่ 5 วิ
-            yield return
-                new WaitForSeconds(
-                    revealDelay
-                );
+            // ==========================
+            // 2. บันทึกข้อมูลปลา
+            // ==========================
 
-
-            // จำข้อมูลปลา
             GameSession.Instance
                 .RegisterFish(data);
 
 
-            // ปิด ScanShape
+            // ==========================
+            // 3. จุดแดงหาย
+            // ==========================
+
+            ClearScanPoints();
+
+
+            // ปิด ScanShape 3D
             scanShapeRoot
                 .gameObject
                 .SetActive(false);
 
 
-            // ล้างจุดแดง
-            ClearScanPoints();
+            // ==========================
+            // 4. ปลา Sprite 2D โผล่
+            // ==========================
 
-
-            // เปิด Sprite ปลา 2D
             spriteRenderer.enabled =
                 true;
 
 
+            // ==========================
+            // 5. รูปข้อมูลโผล่
+            // ==========================
+
+            if (data.InfoImage != null)
+            {
+                infoSpriteRenderer.enabled =
+                    true;
+            }
+
+
+            // ==========================
+            // 6. ค้าง 5 วินาที
+            // ==========================
+
+            yield return
+                new WaitForSeconds(
+                    revealDuration
+                );
+
+
+            // ==========================
+            // 7. รูปข้อมูลหาย
+            // ==========================
+
+            infoSpriteRenderer.enabled =
+                false;
+
+
+            // ==========================
+            // 8. ปลาว่ายต่อ
+            // ==========================
+
+            movement.SetPaused(false);
+
+
             Debug.Log(
-                "REVEALED: " +
+                "Fish resumed: " +
                 data.FishName
             );
-
-
-            // ให้ปลาว่ายต่อ
-            movement.SetPaused(false);
         }
 
 
