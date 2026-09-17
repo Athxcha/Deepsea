@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DeepScan.FishData
   id: Fish_Shrimp
   fishName: Shrimp
-  sprite: {fileID: -852808849, guid: 6182f5e7ec343ae4593330498ed6ea94, type: 3}
+  sprite: {fileID: 904887351, guid: 576d8e367d6b404408c8501864640aa8, type: 3}
   description: Sea Creature
-  infoImage: {fileID: -677093684, guid: 3ae4119fd85c38042afc47bbb9a3a018, type: 3}
+  infoImage: {fileID: 1736866477, guid: f79d1bd3541219a45b69ebe00e467f54, type: 3}
   scanDuration: 3
   scanShapePrefab: {fileID: 6179758569204543301, guid: b7bf7eb666e853f4f87c3ae1b2e80cf0, type: 3}
   movement: {fileID: 11400000, guid: 991012b19dffa7045a73ace88455089a, type: 2}

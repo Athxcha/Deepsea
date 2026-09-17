@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: e718f8ab9abf28e40a5142ece9f5bb70
+guid: 576d8e367d6b404408c8501864640aa8
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -162,13 +162,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Turtle_0
+      name: Shrimp_0
       rect:
         serializedVersion: 2
-        x: 457
-        y: 134
-        width: 992
-        height: 772
+        x: 98
+        y: 218
+        width: 874
+        height: 914
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -177,8 +177,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0c8df9cc5bf0e4442be3823bbddaf36d
-      internalID: -2063076676
+      spriteID: e299472d71b41ab43927427a1f64477d
+      internalID: 904887351
       vertices: []
       indices: 
       edges: []
@@ -187,7 +187,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 97b233f29f81bbb43a6c9f213d5529bb
+    spriteID: a64bfc7da233ab34f965f65cd9788493
     internalID: 0
     vertices: []
     indices: 
@@ -199,7 +199,7 @@ TextureImporter:
       - key: SpriteEditor.SliceSettings
         value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      Turtle_0: -2063076676
+      Shrimp_0: 904887351
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

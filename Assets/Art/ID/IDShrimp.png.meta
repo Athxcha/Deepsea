@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 6182f5e7ec343ae4593330498ed6ea94
+guid: f79d1bd3541219a45b69ebe00e467f54
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -162,45 +162,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Shrimp_0
+      name: IDShrimp_0
       rect:
         serializedVersion: 2
-        x: 404
-        y: 766
-        width: 187
-        height: 74
+        x: 477
+        y: 285
+        width: 970
+        height: 509
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3d4057abdabcbec41b0e6ef681095f49
-      internalID: -461164641
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Shrimp_1
-      rect:
-        serializedVersion: 2
-        x: 100
-        y: 197
-        width: 873
-        height: 972
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 48cf2140dc1d9834fb33cf92d34a43a1
-      internalID: -852808849
+      spriteID: 5eaa9d4b7ae2f7746a5de1b15eaa9096
+      internalID: 1736866477
       vertices: []
       indices: 
       edges: []
@@ -209,7 +187,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: fd5c102b326f53e4ea363d3a331e0735
+    spriteID: a4dbdf26f54989b41bd2c42855d5bfac
     internalID: 0
     vertices: []
     indices: 
@@ -218,13 +196,10 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries:
-      - key: SpriteEditor.SliceOnImport
-        value: False
       - key: SpriteEditor.SliceSettings
         value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      Shrimp_0: -461164641
-      Shrimp_1: -852808849
+      IDShrimp_0: 1736866477
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

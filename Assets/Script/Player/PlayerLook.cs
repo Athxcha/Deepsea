@@ -1,44 +1,72 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace DeepScan
 {
-    public class PlayerLook :
-        MonoBehaviour
+    public class PlayerLook : MonoBehaviour
     {
         [SerializeField]
         private Transform playerBody;
 
+        [Header("Mouse")]
         [SerializeField]
         private float sensitivity = 150f;
 
+        [Header("Xbox Controller")]
+        [SerializeField]
+        private float controllerSensitivity = 120f;
 
         private float verticalRotation;
 
-
         private void Start()
         {
-            Cursor.lockState =
-                CursorLockMode.Locked;
-
+            Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
 
-
         private void Update()
         {
-            float mouseX =
+            // =========================
+            // MOUSE
+            // =========================
+
+            float lookX =
                 Input.GetAxis("Mouse X") *
                 sensitivity *
                 Time.deltaTime;
 
-            float mouseY =
+            float lookY =
                 Input.GetAxis("Mouse Y") *
                 sensitivity *
                 Time.deltaTime;
 
 
-            verticalRotation -=
-                mouseY;
+            // =========================
+            // XBOX RIGHT STICK
+            // =========================
+
+            if (Gamepad.current != null)
+            {
+                Vector2 rightStick =
+                    Gamepad.current.rightStick.ReadValue();
+
+                lookX +=
+                    rightStick.x *
+                    controllerSensitivity *
+                    Time.deltaTime;
+
+                lookY +=
+                    rightStick.y *
+                    controllerSensitivity *
+                    Time.deltaTime;
+            }
+
+
+            // =========================
+            // LOOK UP / DOWN
+            // =========================
+
+            verticalRotation -= lookY;
 
             verticalRotation =
                 Mathf.Clamp(
@@ -46,7 +74,6 @@ namespace DeepScan
                     -80f,
                     80f
                 );
-
 
             transform.localRotation =
                 Quaternion.Euler(
@@ -56,9 +83,12 @@ namespace DeepScan
                 );
 
 
+            // =========================
+            // LOOK LEFT / RIGHT
+            // =========================
+
             playerBody.Rotate(
-                Vector3.up *
-                mouseX
+                Vector3.up * lookX
             );
         }
     }

@@ -26,8 +26,11 @@ namespace DeepScan
         private ScoreResultUI scoreResultUI;
 
 
-        private void Start()
+       private void Start()
         {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+
             ShowFishResult();
         }
 

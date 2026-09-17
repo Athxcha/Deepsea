@@ -6,65 +6,55 @@ namespace DeepScan
     public class ScoreResultUI : MonoBehaviour
     {
         [Header("UI")]
+        [SerializeField] private TMP_Text finalScoreText;
+        [SerializeField] private TMP_Text categoryText;
+        [SerializeField] private TMP_Text correctText;
+        [SerializeField] private TMP_Text streakText;
 
-        [SerializeField]
-        private TMP_Text baseScoreText;
-
-        [SerializeField]
-        private TMP_Text quizText;
-
-        [SerializeField]
-        private TMP_Text multiplierText;
-
-        [SerializeField]
-        private TMP_Text finalScoreText;
-
+        private void Start()
+        {
+            Refresh();
+        }
 
         public void Refresh()
         {
             if (GameSession.Instance == null)
             {
-                Debug.LogError(
-                    "GameSession does not exist."
-                );
-
+                Debug.LogError("GameSession does not exist.");
                 return;
             }
 
-
-            if (baseScoreText != null)
-            {
-                baseScoreText.text =
-                    GameSession.Instance
-                        .BaseScore
-                        .ToString();
-            }
-
-
-            if (quizText != null)
-            {
-                quizText.text =
-                    GameSession.Instance
-                        .CorrectAnswers +
-                    " / 3";
-            }
-
-
-            if (multiplierText != null)
-            {
-                multiplierText.text =
-                    "x" +
-                    GameSession.Instance
-                        .Multiplier;
-            }
-
-
+            // POINT : 1200
             if (finalScoreText != null)
             {
                 finalScoreText.text =
-                    GameSession.Instance
-                        .FinalScore
-                        .ToString();
+                    "POINT : " +
+                    GameSession.Instance.FinalScore;
+            }
+
+            // Category
+            if (categoryText != null)
+            {
+                categoryText.text =
+                    "Category : sea life easy mode";
+            }
+
+            // Correct : 3
+            if (correctText != null)
+            {
+                correctText.text =
+                    "Correct : " +
+                    GameSession.Instance.CorrectAnswers;
+            }
+
+            // X2 : Streak 3
+            if (streakText != null)
+            {
+                streakText.text =
+                    "X" +
+                    GameSession.Instance.Multiplier +
+                    " : Streak " +
+                    GameSession.Instance.CorrectAnswers;
             }
         }
     }
