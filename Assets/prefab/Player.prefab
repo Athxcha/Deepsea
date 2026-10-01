@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3109414868681262246}
   - component: {fileID: 8684075732103400568}
   - component: {fileID: 2577426669333008012}
+  - component: {fileID: 4260163942741936581}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -100,6 +101,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DeepScan.PlayerLook
   playerBody: {fileID: 5785367439613129382}
   sensitivity: 150
+  lockCursorOnStart: 0
+  toggleCursorLockKey: 9
+  controllerSensitivity: 120
+  mpu6050Input: {fileID: 4260163942741936581}
+  autoFindMpu6050Input: 1
+  useMpu6050Yaw: 1
+  mpu6050YawSensitivity: 1
+  mpu6050PitchSensitivity: 1
 --- !u!81 &8684075732103400568
 AudioListener:
   m_ObjectHideFlags: 0
@@ -152,6 +161,38 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!114 &4260163942741936581
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3555797628871871159}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27d27578200fefc49b59379f614b3f12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DeepScan.Mpu6050SerialReader
+  portName: COM6
+  baudRate: 115200
+  openOnStart: 1
+  readTimeoutMs: 50
+  deadZoneDegreesPerSecond: 1.5
+  signalTimeoutSeconds: 0.25
+  useRollTiltToTurn: 1
+  tiltDeadZoneDegrees: 5
+  maxTiltDegrees: 45
+  maxTiltTurnSpeedDegreesPerSecond: 160
+  useGyroPitchToLook: 1
+  useGyroYForPitchLook: 1
+  pitchRateDeadZoneDegreesPerSecond: 1.5
+  usePitchTiltToLook: 1
+  pitchDeadZoneDegrees: 5
+  maxPitchDegrees: 45
+  maxPitchLookSpeedDegreesPerSecond: 120
+  showDebugOverlay: 1
+  logStatus: 1
+  logIntervalSeconds: 1
 --- !u!1 &7681375951213141754
 GameObject:
   m_ObjectHideFlags: 0
